@@ -29,8 +29,9 @@ def getadd(minute):  # make an additive of 4 or less to add to the five minutes 
 def face(hour, minute):
     # setup the device
     serial = spi(port=0, device=1, gpio=noop())
+    # originally I programed this on a CrowPi and had to rotate=3 to make it look correct adjust as required (0-3)
     device = max7219(serial, cascaded=1,  block_orientation=0, rotate=3)
-    device.contrast(1 * 16) # 0 - 15 * 16 for britness
+    device.contrast(1 * 16) # 0 - 15 * 16 for brightness
     
     # draw the face according to the current time
     # to the new hour or passing the old hour
