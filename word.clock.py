@@ -17,25 +17,6 @@ from luma.led_matrix.device import max7219
 from luma.core.interface.serial import spi, noop
 from luma.core.render import canvas
 
-#from adafruit_max7219 import matrices
-#from board import TX, RX, A2
-#import busio
-#import digitalio
-#import time
-
-#clk = RX
-#din = TX
-#cs = digitalio.DigitalInOut(A2)
-#spi = busio.SPI(clk, MOSI=din)
-#display = matrices.Matrix8x8(spi, cs)
-
-# initalize upon startup
-now = datetime.datetime.now()
-global newminute
-newminute = now.minute + 1
-if newminute == 60:
-    newminute = 0
-
 def getadd(minute):  # make an additive of 4 or less to add to the five minutes displayed
     while 5:
         if minute > 5:
@@ -45,17 +26,12 @@ def getadd(minute):  # make an additive of 4 or less to add to the five minutes 
     additive = minute
     return additive
 
-def face():
+def face(hour, minute):
     # setup the device
     serial = spi(port=0, device=1, gpio=noop())
     device = max7219(serial, cascaded=1,  block_orientation=0, rotate=3)
-    device.contrast(1 * 16)
-    # get hours and minutes
-    now = datetime.datetime.now()
-    hour = now.hour
-    # hour = 13
-    minute = now.minute
-    # minute = 31
+    device.contrast(1 * 16) # 0 - 15 * 16 for britness
+    
     # draw the face according to the current time
     # to the new hour or passing the old hour
     with canvas(device) as draw:
@@ -208,27 +184,34 @@ def face():
                 draw.point((7,2), fill=1)
             elif minute > 30:
                 draw.point((5,3), fill=1)
-        # now = datetime.datetime.now()
-        global newminute
-        newminute = now.minute + 1
+        newminute = minute + 1
         if newminute == 60:
             newminute = 0
-        main()
+        return newminute
 
 def main():
-    # if it a new minute then re-draw the face
+    # draw the first clock face
     now = datetime.datetime.now()
-    if now.minute == newminute:
-        face()
-
-try:
-    face()  # draw the first face
+    hour = now.hour
+    minute = now.minute
+    newminute = face(hour, minute)
+    
     while True:
+        # if it a new minute then re-draw the face
+        now = datetime.datetime.now()
+        hour = now.hour
+        minute = now.minute
+        if minute == newminute:
+            newminute = face(hour,minute)
+        else:
+            pass
+        
+if __name__ == '__main__':
+    try:
         main()
-
-except KeyboardInterrupt:
-    # clear the matrix for exit
-    serial = spi(port=0, device=1, gpio=noop())
-    device = max7219(serial, cascaded=1,  block_orientation=0, rotate=3)
-    device.cleanup()
-    pass
+    except KeyboardInterrupt:
+        # clear the matrix for exit
+        serial = spi(port=0, device=1, gpio=noop())
+        device = max7219(serial, cascaded=1,  block_orientation=0, rotate=3)
+        device.cleanup()
+        pass
