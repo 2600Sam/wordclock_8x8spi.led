@@ -153,38 +153,39 @@ def face(hour, minute):
 
         #fine tune the minutes
         additive = getadd(minute)
-        if additive == 1:
-            if minute < 31:
-                draw.point((5,3), fill=1)
-            elif minute > 30:
-                draw.point((5,3), fill=1)
-                draw.point((6,3), fill=1)
-                draw.point((7,3), fill=1)
-                draw.point((7,2), fill=1)
-        if additive == 2:
-            if minute < 31:
-                draw.point((5,3), fill=1)
-                draw.point((6,3), fill=1)
-            elif minute > 30:
-                draw.point((5,3), fill=1)
-                draw.point((6,3), fill=1)
-                draw.point((7,3), fill=1)
-        if additive == 3:
-            if minute < 31:
-                draw.point((5,3), fill=1)
-                draw.point((6,3), fill=1)
-                draw.point((7,3), fill=1)
-            elif minute > 30:
-                draw.point((5,3), fill=1)
-                draw.point((6,3), fill=1)
-        if additive == 4:
-            if minute < 31:
-                draw.point((5,3), fill=1)
-                draw.point((6,3), fill=1)
-                draw.point((7,3), fill=1)
-                draw.point((7,2), fill=1)
-            elif minute > 30:
-                draw.point((5,3), fill=1)
+        if additive < 5:
+            if additive == 1:
+                if minute < 31:
+                    draw.point((5,3), fill=1)
+                elif minute > 30:
+                    draw.point((5,3), fill=1)
+                    draw.point((6,3), fill=1)
+                    draw.point((7,3), fill=1)
+                    draw.point((7,2), fill=1)
+            if additive == 2:
+                if minute < 31:
+                    draw.point((5,3), fill=1)
+                    draw.point((6,3), fill=1)
+                elif minute > 30:
+                    draw.point((5,3), fill=1)
+                    draw.point((6,3), fill=1)
+                    draw.point((7,3), fill=1)
+            if additive == 3:
+                if minute < 31:
+                    draw.point((5,3), fill=1)
+                    draw.point((6,3), fill=1)
+                    draw.point((7,3), fill=1)
+                elif minute > 30:
+                    draw.point((5,3), fill=1)
+                    draw.point((6,3), fill=1)
+            if additive == 4:
+                if minute < 31:
+                    draw.point((5,3), fill=1)
+                    draw.point((6,3), fill=1)
+                    draw.point((7,3), fill=1)
+                    draw.point((7,2), fill=1)
+                elif minute > 30:
+                    draw.point((5,3), fill=1)
         newminute = minute + 1
         if newminute == 60:
             newminute = 0
